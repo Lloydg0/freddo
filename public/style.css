@@ -6,6 +6,258 @@
 body {
     font-family: "Roboto", sans-serif;
     background: rgb(238, 174, 202);
+    /* background: radial-gradient(
+        circle,
+        rgba(238, 174, 202, 1) 0%,
+        rgba(148, 187, 233, 1) 100%
+    ); */
+    background-image: linear-gradient(
+        178.5deg,
+        rgba(122, 231, 248, 1) 6.5%,
+        rgba(86, 118, 191, 1) 90.9%
+    );
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box {
+    z-index: 1;
+    height: 75vh;
+    width: 40vw;
+    background: #fff;
+    padding: 50px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
+    text-align: center;
+    filter: drop-shadow(1px 1px 20px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+}
+.box-left {
+    z-index: 1;
+    height: 75vh;
+    width: 30vw;
+    background: #0c2551;
+    /* background: #0c2551d0; */
+    padding: 50px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: relative;
+    text-align: center;
+    filter: drop-shadow(1px 1px 20px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+}
+
+h1,
+h3,
+.title-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    text-align: start;
+}
+
+.more-supporters {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+    text-decoration: none;
+    color: #0c2551;
+    font-size: 20px;
+    font-family: "Roboto Condensed", sans-serif;
+    overflow: hidden;
+    background: linear-gradient(
+        to right,
+        rgba(122, 231, 248, 1) 0%,
+        rgba(86, 118, 191, 1) 50%,
+        #0c2551 50%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 1000ms ease;
+}
+
+.more-supporters:hover {
+    background-position: 0 100%;
+}
+
+.supporters-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+}
+.supporters-list {
+    margin: 3px;
+    display: flex;
+    justify-content: center;
+    font-family: "Roboto Condensed", sans-serif;
+    color: #0c2551;
+    font-size: 16px;
+}
+
+.petition-description {
+    color: #fff;
+}
+
+h1,
+h3,
+.title-head {
+    /* color: #fff; */
+    color: #0c2551;
+    font-family: "Montserrat", sans-serif;
+}
+
+.conditions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.check {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 24px;
+    height: 14px;
+    width: 14px;
+    clear: both;
+}
+
+.terms {
+    display: inline-block;
+    font-size: 10px;
+    padding-top: 6px;
+    padding-left: 10px;
+}
+
+input,
+label,
+.terms,
+.navilinks,
+.register-label {
+    font-family: "Roboto Condensed", sans-serif;
+    color: #0c2551;
+}
+
+.navilinks,
+.logout {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.navilinks {
+    margin-bottom: 5px;
+}
+
+.navilink-register {
+    margin-right: 10px;
+    color: #0c2551;
+}
+
+.navilink-login {
+    color: #0c2551;
+}
+
+.navilink-logout {
+    color: #0c2551;
+}
+
+.firstname-label,
+.lastname-label,
+.signature-label,
+.user-password-label,
+.user-email-label,
+.register-label {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+
+.register-label {
+    padding-bottom: 10px;
+}
+
+.signature-label {
+    padding-bottom: 5px;
+}
+
+input {
+    display: block;
+    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    background-color: #f5f6f7;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 0px;
+    margin-top: 5px;
+    height: 25px;
+    width: 200px;
+}
+
+#canvas-signature {
+    border: 1px solid rgba(0, 0, 0, 0.205);
+    background-color: #f5f6f7;
+    border-radius: 15px;
+    cursor: crosshair;
+}
+
+#hidden-data {
+    /* visibility: hidden; */
+    display: none;
+}
+
+#submit-button {
+    display: inline-block;
+    padding: 7px 40px;
+    border: 1px solid #ffffff;
+    margin: 14px 4px 4px 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: "Roboto Condensed", sans-serif;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.15s;
+    background-color: #ea4c89;
+}
+
+#submit-button:hover {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+/* * {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    background: rgb(238, 174, 202);
     background: radial-gradient(
         circle,
         rgba(238, 174, 202, 1) 0%,
@@ -115,14 +367,25 @@ h3 {
 
 input,
 label,
-.terms {
+.terms,
+.logout,
+.signin {
     font-family: "Roboto Condensed", sans-serif;
     color: black;
 }
 
+.signin,
+.logout {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
 .firstname-label,
 .lastname-label,
-.signature-label {
+.signature-label,
+.user-password-label,
+.user-email-label {
     display: flex;
     justify-content: flex-start;
     margin-top: 5px;
@@ -153,7 +416,7 @@ input {
 }
 
 #hidden-data {
-    /* visibility: hidden; */
+    
     display: none;
 }
 
@@ -182,4 +445,4 @@ form {
     top: 50%;
     left: 75%;
     transform: translate(-50%, -50%);
-}
+}  */

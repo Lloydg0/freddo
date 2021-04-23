@@ -48,7 +48,11 @@ app.use((req, res, next) => {
     console.log("req.session", req.session);
     console.log("req.body", req.body);
 
-    if (!req.session.signatureId && req.url !== "/petition") {
+    if (
+        !req.session.signatureId &&
+        req.url !== "/petition" &&
+        req.session.user_id
+    ) {
         res.redirect("/petition");
     } else {
         next();
@@ -56,10 +60,27 @@ app.use((req, res, next) => {
 });
 ////////////////////////////////////////////////////////////////
 
-//Get request
+///////////////////////////////////////////////////Get requests
+
+// login get request
+app.get("/login", (req, res) => {
+    console.log("a GET request was made to /login Route");
+    res.render("login", {
+        layout: "main",
+    });
+});
+
+// register get request
+app.get("/register", (req, res) => {
+    console.log("a GET request was made to /register Route");
+    res.render("register", {
+        layout: "main",
+    });
+});
+
+//petition(signature) page get request
 app.get("/petition", (req, res) => {
     console.log("a GET request was made to /petition Route");
-    // res.session.signature-id
     if (req.session.signatureId) {
         res.redirect("/thanks");
     } else {
@@ -69,6 +90,7 @@ app.get("/petition", (req, res) => {
     }
 });
 
+//thanks page get request
 app.get("/thanks", (req, res) => {
     console.log("a GET request was made to /thanks Route");
     if (!req.session.signatureId) {
@@ -87,6 +109,7 @@ app.get("/thanks", (req, res) => {
     }
 });
 
+//signers page get request
 app.get("/signers", (req, res) => {
     console.log("a GET request was made to /signers Route");
     if (!req.session.signatureId) {
@@ -107,28 +130,130 @@ app.get("/signers", (req, res) => {
     }
 });
 
-//POST request
+//logout get request
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/register");
+});
+
+//////////////////////////////////////////////////////////////
+
+// Petition( signature) POST request
 app.post("/petition", (req, res) => {
     console.log(" a Post request was made to /petition");
+    console.log("find user_id", req.body);
+    console.log("req.session", req.session);
     //sending the cookie
     if (req.body.yes) {
-        console.log("req URL: ", req.url);
         //sending the added data to the db
-        db.addData(req.body)
+        db.addSignatureId(req.body.signature, req.session.user_id)
             .then((result) => {
-                // console.log("result: ", result);
                 req.session.signatureId = result.rows[0].id;
                 res.redirect("/thanks");
             })
             .catch((err) => {
-                //insert validation error TODO
-                console.log("Error in adding Data", err);
+                console.log("Error in adding Signature", err);
                 res.render("petition", {
                     layout: "main",
                 });
             });
     } else {
         res.redirect("/petition");
+    }
+    //validation
+    // if (!req.body.signature) {
+    //     return res.render("/petition", {
+    //         err: "No signature detected",
+    //     });
+    // }
+});
+
+// register POST request
+app.post("/register", (req, res) => {
+    console.log("This was a POST request to the register route");
+    // read the body
+    const { first_name, last_name, email, password } = req.body;
+    if (password) {
+        //hash password
+        hash(password)
+            .then((password_hash) => {
+                //hash the password
+                db.saveUserRegistrationData({
+                    first_name,
+                    last_name,
+                    email,
+                    password_hash,
+                })
+                    .then((result) => {
+                        req.session.user_id = result.rows[0].id;
+                        res.redirect("/petition");
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Error in saving Users registration data",
+                            err
+                        );
+                    });
+            })
+            .catch((err) => {
+                console.log("error in hash", err);
+            });
+    }
+
+    //validation;
+    if (!first_name || !last_name || !email || !password) {
+        return res.render("/register", {
+            err: "An error occurred, please try again. ",
+        });
+    }
+});
+
+// login POST request
+app.post("/login", (req, res) => {
+    console.log("This was a POST request to the login route");
+    const { email, password } = req.body;
+    if (email) {
+        db.retrivingUserEmail(email)
+            .then((result) => {
+                if (result) {
+                    console.log(
+                        "result on login: ",
+                        result.rows[0].password_hash
+                    );
+                    // Verifying Passwords:
+                    compare(password, result.rows[0].password_hash)
+                        .then((comparison) => {
+                            console.log("comparison", comparison);
+                            // comparison will be true or false
+                            if (comparison) {
+                                req.session.user_id = result.rows[0].id;
+                                res.redirect("/thanks");
+                            } else {
+                                if (!comparison) {
+                                    return res.render("/login", {
+                                        err: "Wrong Email Or Password",
+                                    });
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(
+                                "Password Comparison does not match",
+                                err
+                            );
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log("Error in retriving Email", err);
+            });
+
+        //validation
+        if (!email || !password) {
+            return res.render("/login", {
+                err: "No credentials found",
+            });
+        }
     }
 });
 

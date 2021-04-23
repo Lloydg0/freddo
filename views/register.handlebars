@@ -1,0 +1,33 @@
+{{>sign-in}}
+<h3 class="title-head">Please Register</h3>
+<h4 class="title-head">To Access the Petition</h4>
+
+
+<form method="POST">
+<div>
+    <label class="firstname-label" for="firstname">First Name</label>
+    <input id="firstname" type="text" name="first_name"  required>
+
+    <label class="lastname-label" for="lastname">Last Name</label>
+    <input id="lastname" type="text" name="last_name" required>
+</div>
+<div>
+    <label class="user-email-label" for="user-email-label">Email</label>
+    <input id="user-email" type="email" name="email"  required>
+
+    <label class="user-password-label" for="user-password-label">Password</label>
+    <input id="user-password" type="password" name="password" required>
+</div>
+
+    {{#if err}}
+    <h5>{{err}}</h5>
+    {{/if}}
+
+
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+<div>
+    <label for="button"></label>
+    <button id="submit-button">Register</button>
+</div> 
+</form>
