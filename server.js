@@ -6,7 +6,7 @@ const hb = require("express-handlebars");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const { SECRET_KEY } = require("./secrets.json");
-const { hash, compare } = require("./utils/bc.js");
+const { hash, compare, prefixURL } = require("./utils/bc.js");
 
 // config information
 app.engine("handlebars", hb());
@@ -58,6 +58,7 @@ app.use((req, res, next) => {
         next();
     }
 });
+
 ////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////Get requests
@@ -76,6 +77,16 @@ app.get("/register", (req, res) => {
     res.render("register", {
         layout: "main",
     });
+});
+
+//profile GET request
+app.get("/profile", (req, res) => {
+    console.log("a GET request was made to /profile Route");
+    if (req.session.user_id) {
+        res.render("profile", {
+            layour: "main",
+        });
+    }
 });
 
 //petition(signature) page get request
@@ -97,15 +108,17 @@ app.get("/thanks", (req, res) => {
         res.redirect("/petition");
     } else {
         //getting the signature from the ID and allowing it to be rendered
-        db.getSignatureById(req.session.signatureId).then((result) => {
-            console.log(result);
-            res.render("thanks", {
-                layout: "main",
-                signature: result.rows[0].signature,
-            }).catch((err) => {
+        db.getSignatureById(req.session.signatureId)
+            .then((result) => {
+                // console.log(result);
+                res.render("thanks", {
+                    layout: "main",
+                    signature: result.rows[0].signature,
+                });
+            })
+            .catch((err) => {
                 console.log("error in signature render", err);
             });
-        });
     }
 });
 
@@ -114,20 +127,36 @@ app.get("/signers", (req, res) => {
     console.log("a GET request was made to /signers Route");
     if (!req.session.signatureId) {
         res.redirect("/petition");
-    } else {
-        // SELECT first_name AND last_name FROM signatures
-        db.getData()
-            .then((result) => {
-                // console.log("result.rows", result.rows);
-                res.render("signers", {
-                    layout: "main",
-                    dbdata: result.rows,
+    } else if (req.session.user_id) {
+        if (req.session.signatureId) {
+            // SELECT first_name AND last_name FROM signatures
+            db.getUserDataForSignersPage()
+                .then((result) => {
+                    console.log("result.rows", result.rows);
+                    res.render("signers", {
+                        layout: "main",
+                        dbdata: result.rows,
+                    });
+                })
+                .catch((err) => {
+                    console.log("Error", err);
                 });
-            })
-            .catch((err) => {
-                console.log("Error", err);
-            });
+        }
     }
+});
+
+//signers city get request
+app.get("/signers/:city", (req, res) => {
+    const { city } = req.params;
+    console.log("city", city);
+
+    db.getSignersByCity(city).then((result) => {
+        console.log("City result", result);
+        res.render("signers", {
+            layout: "main",
+            dbdata: result.rows,
+        });
+    });
 });
 
 //logout get request
@@ -136,13 +165,14 @@ app.get("/logout", (req, res) => {
     res.redirect("/register");
 });
 
-//////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+//////////////////////////// POST REQUESTS //////////////////////////
 
 // Petition( signature) POST request
 app.post("/petition", (req, res) => {
-    console.log(" a Post request was made to /petition");
-    console.log("find user_id", req.body);
-    console.log("req.session", req.session);
+    // console.log(" a Post request was made to /petition");
+    // console.log("find user_id", req.body);
+    // console.log("req.session", req.session);
     //sending the cookie
     if (req.body.yes) {
         //sending the added data to the db
@@ -161,11 +191,11 @@ app.post("/petition", (req, res) => {
         res.redirect("/petition");
     }
     //validation
-    // if (!req.body.signature) {
-    //     return res.render("/petition", {
-    //         err: "No signature detected",
-    //     });
-    // }
+    if (!req.body.signature) {
+        return res.render("/petition", {
+            err: "No signature detected",
+        });
+    }
 });
 
 // register POST request
@@ -186,7 +216,7 @@ app.post("/register", (req, res) => {
                 })
                     .then((result) => {
                         req.session.user_id = result.rows[0].id;
-                        res.redirect("/petition");
+                        res.redirect("/profile");
                     })
                     .catch((err) => {
                         console.log(
@@ -216,14 +246,9 @@ app.post("/login", (req, res) => {
         db.retrivingUserEmail(email)
             .then((result) => {
                 if (result) {
-                    console.log(
-                        "result on login: ",
-                        result.rows[0].password_hash
-                    );
                     // Verifying Passwords:
                     compare(password, result.rows[0].password_hash)
                         .then((comparison) => {
-                            console.log("comparison", comparison);
                             // comparison will be true or false
                             if (comparison) {
                                 req.session.user_id = result.rows[0].id;
@@ -254,6 +279,32 @@ app.post("/login", (req, res) => {
                 err: "No credentials found",
             });
         }
+    }
+});
+
+//POST /profile route
+app.post("/profile", (req, res) => {
+    console.log("This was a POST request to the /profile route");
+    const { age, city, url } = req.body;
+
+    if (req.session.user_id) {
+        const prefixedURL = prefixURL(url);
+        //adding user profile information to db
+        db.addUserProfileInfo({ age, city, prefixedURL }, req.session.user_id)
+            .then((result) => {
+                console.log("result in storing user profile info", result);
+                // checking to see if a valid number was entered for age and throwing on page error.
+                if (isNaN(age) && !age % 1 === 0) {
+                    res.render("/profile", {
+                        err: "Please enter a valid number only for age",
+                    });
+                }
+
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                console.log("Error in post profiles route", err);
+            });
     }
 });
 

@@ -1,10 +1,16 @@
 {{>log-out}}
 <h1>More supporters</h1>
+<div class="supporters-wrapper">
 <div class="supporters-container">
 {{#dbdata}}
 <p class="supporters-list">
-{{first_name}} {{last_name}}
+    {{#if url}}
+    <a class="url-link" href="{{url}}">{{first_name}} {{last_name}}</a>  {{age}}  <a class="url-link" href="{{city}}">{{city}}</a> 
+    {{else}}
+    {{first_name}} {{last_name}}  {{age}}  <a class="url-link" href="{{city}}">{{city}}</a>
+    {{/if}}
 </p>
 {{/dbdata}}
+</div>
 </div>
 

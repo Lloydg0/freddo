@@ -1,0 +1,27 @@
+{{>log-out}}
+<h3 class="title-head">It would be great if you would tell us some more</h3>
+<h4 class="title-head">Of course this is optional... </h4>
+
+
+<form method="POST">
+<div>
+    {{#if err}}
+    <h5>{{err}}</h5>
+    {{/if}}
+<label class="user-age-label" for="user-age-label">Age</label>
+    <input id="user-age" type="text" name="age"  required>
+
+    <label class="user-city-label" for="user-city-label">City</label>
+    <input id="user-city" type="text" name="city" >
+
+    <label class="user-website-label" for="user-website-label">Website</label>
+    <input id="user-website" type="text" name="url" >
+</div>
+
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+<div>
+    <label for="button"></label>
+    <button id="submit-button">Continue</button>
+</div> 
+</form>

@@ -2,9 +2,18 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
-//gets data first & Last name from signatrues DB to present to the /signers route
-module.exports.getData = () => {
-    return db.query(`SELECT first_name, last_name FROM users`);
+// gets data first & Lastname, age, city and website name from signatrues DB to present to the /signers route
+module.exports.getUserDataForSignersPage = () => {
+    const q = `SELECT users.id, first_name, last_name, user_profiles.id, age, city, url FROM users
+                    LEFT JOIN user_profiles  ON users.id = user_profiles.user_id
+                    LEFT JOIN signatures ON user_profiles.id = signatures.user_id`;
+    return db.query(q);
+};
+
+//gets the signers by city render into the /signers:city route
+module.exports.getSignersByCity = () => {
+    const q = `SELECT city FROM user_profiles`;
+    return db.query(q);
 };
 
 //gets the signature id to render into the /thanks route
@@ -40,5 +49,13 @@ module.exports.addSignatureId = (signature, user_id) => {
     VALUES ($1, $2) RETURNING ID`;
     const params = [user_id, signature];
     console.log("user_id", user_id);
+    return db.query(q, params);
+};
+
+// add the user_profiles information into the database
+module.exports.addUserProfileInfo = (data, user_id) => {
+    const q = `INSERT INTO user_profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4) RETURNING ID`;
+    const params = [data.age, data.city, data.prefixedURL, user_id];
     return db.query(q, params);
 };
