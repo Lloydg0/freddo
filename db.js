@@ -2,6 +2,36 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
+//Getting the dynamic data to show in the edit page
+module.exports.getUpdatableUserData = () => {
+    const q = `SELECT users.id, first_name, last_name, email, user_profiles.id, age, city, url FROM users
+                    LEFT JOIN user_profiles ON users.id = user_profiles.user_id
+                    `;
+    return db.query(q);
+};
+
+//update on users first,last, email,password
+module.exports.updateUsersFirstLastEmail = () => {
+    const q = `UPDATE users `;
+    return db.query(q);
+};
+
+//update on users first,last, email
+module.exports.updateUsersFirstLastEmailAndPassword = () => {
+    const q = `UPDATE users`;
+    return db.query(q);
+};
+
+//USERT on users_profiles first,last, email
+module.exports.upsertUserProfilesAgeCityUrl = (age, city, url) => {
+    const q = ` INSERT INTO user_profiles (age, city, url)
+                VALUES ($1,$2,$3)
+                ON CONFLICT (email)
+                DO UPDATE SET age = $1, city = $2 , url = $3;`;
+    const params = [age, city, url];
+    return db.query(q, params);
+};
+
 // gets data first & Lastname, age, city and website name from signatrues DB to present to the /signers route
 module.exports.getUserDataForSignersPage = () => {
     const q = `SELECT users.id, first_name, last_name, user_profiles.id, age, city, url FROM users

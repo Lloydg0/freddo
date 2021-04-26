@@ -49,15 +49,6 @@ app.use((req, res, next) => {
     console.log("req.body", req.body);
 
     next();
-    // if (
-    //     !req.session.signatureId &&
-    //     req.url !== "/petition" &&
-    //     req.session.user_id
-    // ) {
-    //     res.redirect("/petition");
-    // } else {
-    //     next();
-    // }
 });
 
 ////////////////////////////////////////////////////////////////
@@ -149,8 +140,6 @@ app.get("/signers", (req, res) => {
 //signers city get request
 app.get("/signers/:city", (req, res) => {
     const { city } = req.params;
-    console.log("req.params", req.params);
-    console.log("city", city);
     if (req.url) {
         db.getUserDataForSignersByCity(city)
             .then((result) => {
@@ -158,6 +147,7 @@ app.get("/signers/:city", (req, res) => {
                 res.render("signers", {
                     layout: "main",
                     dbdata: result.rows,
+                    city,
                 });
             })
             .catch((err) => {
@@ -170,9 +160,22 @@ app.get("/signers/:city", (req, res) => {
 app.get("/profile/edit", (req, res) => {
     console.log("GET request made to the profile edit route");
     if (req.session.user_id) {
-        res.render("edit", {
-            layout: "main",
-        });
+        db.getUpdatableUserData(req.session.user_id)
+            .then((result) => {
+                console.log("result in profile edit route", result);
+                res.render("edit", {
+                    layout: "main",
+                    first_name: result.rows.first_name,
+                    last_name: result.rows.last_name,
+                    email: result.rows.email,
+                    age: result.rows.age,
+                    city: result.rows.city,
+                    url: result.rows.url,
+                });
+            })
+            .catch((err) => {
+                console.log("Error in profile/edit get request", err);
+            });
     }
 });
 
@@ -187,9 +190,7 @@ app.get("/logout", (req, res) => {
 
 // Petition( signature) POST request
 app.post("/petition", (req, res) => {
-    // console.log(" a Post request was made to /petition");
-    // console.log("find user_id", req.body);
-    // console.log("req.session", req.session);
+    console.log(" a Post request was made to /petition");
     //sending the cookie
     if (req.body.yes) {
         //sending the added data to the db
@@ -320,6 +321,91 @@ app.post("/profile", (req, res) => {
         res.render("/profile", {
             err: "Please enter a valid number only for age",
         });
+    }
+});
+
+//POST /profile/edit request
+app.post("/profile/edit", (req, res) => {
+    console.log("This is a POST request to the /profile/edit route");
+    const { password } = req.body;
+    if (password) {
+        //runs if user did enter a password+
+        hash(password)
+            .then((password_hash) => {
+                //hash the password
+                db.saveUserRegistrationData({
+                    first_name,
+                    last_name,
+                    email,
+                    password_hash,
+                })
+                    .then((result) => {
+                        req.session.user_id = result.rows[0].id;
+                        res.redirect("/profile");
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Error in saving Users registration data",
+                            err
+                        );
+                    });
+            })
+            .catch((err) => {
+                console.log("error in hash", err);
+            });
+        // UPDATE on users (first, last, email, and password) columns
+        db.updateUsersFirstLastEmailAndPassword()
+            .then((result) => {
+                console.log(
+                    "result in updating users first_name, last_name, email and password",
+                    result
+                );
+                // UPSERT on user_profiles
+                db.upsertUserProfilesAgeCityUrl()
+                    .then((result) => {
+                        console.log(
+                            "result in upsert for first_name, last_name, email and password",
+                            result
+                        );
+                        res.redirect("/thanks");
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Error in upsert for first_name, last_name, email and password change",
+                            err
+                        );
+                    });
+            })
+            .catch((err) => {
+                console.log(
+                    "Error in updating users first_name, last_name, email  and password",
+                    err
+                );
+            });
+    } else {
+        // runs if the user did not enter a new password
+        db.updateUsersFirstLastEmailAndPassword()
+            .then((result) => {
+                console.log("result in updating users age, city, url", result);
+                // and (2) run the UPSERT on user_profiles
+                db.upsertUserProfilesAgeCityUrl()
+                    .then((result) => {
+                        console.log(
+                            "result in upsert for age, city, url",
+                            result
+                        );
+                        res.redirect("/thanks");
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Error in upsert for age, city, url change",
+                            err
+                        );
+                    });
+            })
+            .catch((err) => {
+                console.log("Error in updating users age, city, url", err);
+            });
     }
 });
 
