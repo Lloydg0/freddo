@@ -10,10 +10,13 @@ module.exports.getUserDataForSignersPage = () => {
     return db.query(q);
 };
 
-//gets the signers by city render into the /signers:city route
-module.exports.getSignersByCity = () => {
-    const q = `SELECT city FROM user_profiles`;
-    return db.query(q);
+// gets data like above with extra conditional for the /signers:city route
+module.exports.getUserDataForSignersByCity = (city) => {
+    const q = `SELECT users.id, first_name, last_name, user_profiles.id, age, city, url FROM users
+    LEFT JOIN user_profiles  ON users.id = user_profiles.user_id
+    LEFT JOIN signatures ON user_profiles.id = signatures.user_id
+    WHERE LOWER(city) = LOWER($1)`;
+    return db.query(q, [city]);
 };
 
 //gets the signature id to render into the /thanks route
@@ -38,7 +41,7 @@ module.exports.saveUserRegistrationData = (data) => {
 //retreiving user email & password from users database
 module.exports.retrivingUserEmail = (email) => {
     // const q = `SELECT id, email, password_hash FROM users`;
-    const q = `SELECT id, password_hash FROM users where email = $1`;
+    const q = `SELECT id, password_hash FROM users WHERE email = $1`;
     return db.query(q, [email]);
 };
 

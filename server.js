@@ -149,14 +149,19 @@ app.get("/signers", (req, res) => {
 app.get("/signers/:city", (req, res) => {
     const { city } = req.params;
     console.log("city", city);
-
-    db.getSignersByCity(city).then((result) => {
-        console.log("City result", result);
-        res.render("signers", {
-            layout: "main",
-            dbdata: result.rows,
-        });
-    });
+    if (req.url) {
+        db.getUserDataForSignersByCity(city)
+            .then((result) => {
+                console.log("City result", result);
+                res.render("signers", {
+                    layout: "main",
+                    dbdata: result.rows,
+                });
+            })
+            .catch((err) => {
+                console.log("Error in getting city from signers page", err);
+            });
+    }
 });
 
 //logout get request
@@ -299,7 +304,6 @@ app.post("/profile", (req, res) => {
                         err: "Please enter a valid number only for age",
                     });
                 }
-
                 res.redirect("/petition");
             })
             .catch((err) => {
