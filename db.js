@@ -32,6 +32,12 @@ module.exports.upsertUserProfilesAgeCityUrl = (age, city, url) => {
     return db.query(q, params);
 };
 
+//DELETE the signature from the signatures table
+module.exports.deleteSignature = () => {
+    const q = `DELETE singature FROM signatures`;
+    return db.query(q);
+};
+
 // gets data first & Lastname, age, city and website name from signatrues DB to present to the /signers route
 module.exports.getUserDataForSignersPage = () => {
     const q = `SELECT users.id, first_name, last_name, user_profiles.id, age, city, url FROM users

@@ -409,4 +409,19 @@ app.post("/profile/edit", (req, res) => {
     }
 });
 
+//POST request for /signature/delete route
+app.post("/singature/delete", (req, res) => {
+    console.log("This is a POST request to the signature/delete route");
+
+    db.deleteSignature()
+        .then((result) => {
+            console.log("result in delete singature", result);
+            req.session.signatureId = null;
+            res.redirect("/petition");
+        })
+        .catch((err) => {
+            console.log("Error in delete signautre", err);
+        });
+});
+
 app.listen(8080, () => console.log("Petition up and running"));

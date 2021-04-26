@@ -57,15 +57,46 @@ h3,
     text-align: start;
 }
 
-.more-supporters {
+.more-supporters,
+.delete-signature {
     display: flex;
     justify-content: center;
-    margin: 50px;
+    margin: 40px;
     text-decoration: none;
     color: #0c2551;
     font-size: 20px;
     font-family: "Roboto Condensed", sans-serif;
     overflow: hidden;
+}
+
+.delete-signature-wrapper {
+    position: absolute;
+    /* bottom: 10%; */
+    left: 50%;
+}
+
+.delete-signature {
+    background: none;
+    border: none;
+    margin: 0px;
+    padding: 15px;
+    cursor: pointer;
+    height: 40px;
+    width: 200px;
+}
+.delete-signature {
+    background: linear-gradient(
+        to right,
+        rgb(206, 129, 13) 0%,
+        rgb(241, 22, 6) 50%,
+        #0c2551 50%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 750ms ease;
 }
 
 .navilink-login,
@@ -91,7 +122,8 @@ h3,
 .navilink-signers:hover,
 .navilink-register:hover,
 .navilink-logout:hover,
-.more-supporters:hover {
+.more-supporters:hover,
+.delete-signature:hover {
     background-position: 0 100%;
 }
 
