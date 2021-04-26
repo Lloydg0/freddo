@@ -48,15 +48,16 @@ app.use((req, res, next) => {
     console.log("req.session", req.session);
     console.log("req.body", req.body);
 
-    if (
-        !req.session.signatureId &&
-        req.url !== "/petition" &&
-        req.session.user_id
-    ) {
-        res.redirect("/petition");
-    } else {
-        next();
-    }
+    next();
+    // if (
+    //     !req.session.signatureId &&
+    //     req.url !== "/petition" &&
+    //     req.session.user_id
+    // ) {
+    //     res.redirect("/petition");
+    // } else {
+    //     next();
+    // }
 });
 
 ////////////////////////////////////////////////////////////////
@@ -148,11 +149,12 @@ app.get("/signers", (req, res) => {
 //signers city get request
 app.get("/signers/:city", (req, res) => {
     const { city } = req.params;
+    console.log("req.params", req.params);
     console.log("city", city);
     if (req.url) {
         db.getUserDataForSignersByCity(city)
             .then((result) => {
-                console.log("City result", result);
+                // console.log("City result", result);
                 res.render("signers", {
                     layout: "main",
                     dbdata: result.rows,
@@ -161,6 +163,16 @@ app.get("/signers/:city", (req, res) => {
             .catch((err) => {
                 console.log("Error in getting city from signers page", err);
             });
+    }
+});
+
+// GET profile/edit route
+app.get("/profile/edit", (req, res) => {
+    console.log("GET request made to the profile edit route");
+    if (req.session.user_id) {
+        res.render("edit", {
+            layout: "main",
+        });
     }
 });
 
@@ -291,24 +303,23 @@ app.post("/login", (req, res) => {
 app.post("/profile", (req, res) => {
     console.log("This was a POST request to the /profile route");
     const { age, city, url } = req.body;
-
     if (req.session.user_id) {
         const prefixedURL = prefixURL(url);
         //adding user profile information to db
         db.addUserProfileInfo({ age, city, prefixedURL }, req.session.user_id)
             .then((result) => {
                 console.log("result in storing user profile info", result);
-                // checking to see if a valid number was entered for age and throwing on page error.
-                if (isNaN(age) && !age % 1 === 0) {
-                    res.render("/profile", {
-                        err: "Please enter a valid number only for age",
-                    });
-                }
                 res.redirect("/petition");
             })
             .catch((err) => {
                 console.log("Error in post profiles route", err);
             });
+    }
+    // checking to see if a valid number was entered for age and throwing on page error.
+    if (isNaN(age) && !age % 1 === 0) {
+        res.render("/profile", {
+            err: "Please enter a valid number only for age",
+        });
     }
 });
 
