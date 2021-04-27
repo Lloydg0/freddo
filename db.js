@@ -32,23 +32,34 @@ module.exports.getUpdatableUserData = () => {
 // };
 
 //update on users first,last, email,password
-module.exports.updateUsersFirstLastEmail = (id) => {
-    const q = `UPDATE users SET (first_name, last_name, email) = (first_name, last_name, email) 
-               WHERE ID = $1`;
-    return db.query(q, [id]);
+module.exports.updateUsersFirstLastEmail = (
+    frist_name,
+    last_name,
+    email,
+    id
+) => {
+    const q = `UPDATE users SET (first_name, last_name, email) = (first_name = $1, last_name = $2 , email = $3) 
+               WHERE ID = $4`;
+    return db.query(q, [frist_name, last_name, email, id]);
 };
 
 //update on users first,last, email and password
-module.exports.updateUsersFirstLastEmailAndPassword = (id) => {
-    const q = `UPDATE users SET (first_name, last_name, email, password_hash) = (first_name, last_name, email, password_hash) 
-               WHERE ID = $1`;
-    return db.query(q, [id]);
+module.exports.updateUsersFirstLastEmailAndPassword = (
+    frist_name,
+    last_name,
+    email,
+    password_hash,
+    id
+) => {
+    const q = `UPDATE users SET (first_name, last_name, email, password_hash) = (first_name = $1, last_name = $2 , email = $3, password_hash = $4) 
+               WHERE ID = $5`;
+    return db.query(q, [frist_name, last_name, email, password_hash, id]);
 };
 
 //USERT on users_profiles first,last, email
 module.exports.upsertUserProfilesAgeCityUrl = (age, city, url) => {
     const q = ` INSERT INTO user_profiles (age, city, url)
-                VALUES ($1,$2,$3)
+                VALUES ($1, $2, $3)
                 ON CONFLICT (user_id)
                 DO UPDATE SET age = $1, city = $2 , url = $3
                 RETURNING user_id`;
@@ -57,9 +68,9 @@ module.exports.upsertUserProfilesAgeCityUrl = (age, city, url) => {
 };
 
 //DELETE the signature from the signatures table
-module.exports.deleteSignature = () => {
-    const q = `DELETE singature FROM signatures`;
-    return db.query(q);
+module.exports.deleteSignature = (user_id) => {
+    const q = `DELETE FROM signatures WHERE user_id = $1`;
+    return db.query(q, [user_id]);
 };
 
 // gets data first & Lastname, age, city and website name from signatrues DB to present to the /signers route
@@ -99,14 +110,8 @@ module.exports.saveUserRegistrationData = (data) => {
 };
 
 //retreiving user email & password from users database
-// module.exports.retrivingUserEmail = (email) => {
-//     // const q = `SELECT id, email, password_hash FROM users`;
-//     const q = `SELECT id, password_hash FROM users WHERE email = $1`;
-//     return db.query(q, [email]);
-// };
 module.exports.retrivingUserEmail = (email) => {
-    // const q = `SELECT id, email, password_hash FROM users`;
-    const q = `SELECT users.id, password_hash, signature FROM users 
+    const q = `SELECT users.id, password_hash, signatures.id AS "signature" FROM users 
                LEFT JOIN signatures 
                ON users.id = signatures.user_id 
                WHERE email = $1`;

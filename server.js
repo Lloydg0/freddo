@@ -269,7 +269,10 @@ app.post("/login", (req, res) => {
                         .then((comparison) => {
                             // comparison will be true or false
                             if (comparison) {
+                                console.log("comparisonr results", result);
                                 req.session.user_id = result.rows[0].id;
+                                req.session.signatureId =
+                                    result.rows[0].signature;
                                 res.redirect("/thanks");
                             } else {
                                 if (!comparison) {
@@ -404,10 +407,10 @@ app.post("/profile/edit", (req, res) => {
 });
 
 //POST request for /signature/delete route
-app.post("/singature/delete", (req, res) => {
+app.post("/signature/delete", (req, res) => {
     console.log("This is a POST request to the signature/delete route");
 
-    db.deleteSignature()
+    db.deleteSignature(req.session.user_id)
         .then((result) => {
             console.log("result in delete singature", result);
             req.session.signatureId = null;
