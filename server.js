@@ -124,7 +124,7 @@ app.get("/signers", (req, res) => {
             // SELECT first_name AND last_name FROM signatures
             db.getUserDataForSignersPage()
                 .then((result) => {
-                    console.log("result.rows", result.rows);
+                    // console.log("result.rows", result.rows);
                     res.render("signers", {
                         layout: "main",
                         dbdata: result.rows,
@@ -307,6 +307,7 @@ app.post("/login", (req, res) => {
 app.post("/profile", (req, res) => {
     console.log("This was a POST request to the /profile route");
     const { age, city, url } = req.body;
+    //check if age city, url entered then database insert
     if (req.session.user_id) {
         const prefixedURL = prefixURL(url);
         //adding user profile information to db
@@ -319,6 +320,10 @@ app.post("/profile", (req, res) => {
                 console.log("Error in post profiles route", err);
             });
     }
+    // otherwise redirect
+    // } else if () {
+    //     res.redirect("/thanks");
+    // }
     // checking to see if a valid number was entered for age and throwing on page error.
     if (isNaN(age) && !age % 1 === 0) {
         res.render("/profile", {
@@ -330,11 +335,13 @@ app.post("/profile", (req, res) => {
 //POST /profile/edit request
 app.post("/profile/edit", (req, res) => {
     console.log("This is a POST request to the /profile/edit route");
-    const { password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
     if (password) {
-        //runs if user did enter a password+
+        console.log("REQ>BODY", req.body);
+        //hash password
         hash(password)
             .then((password_hash) => {
+                console.log("Password hash", password_hash);
                 //hash the password
                 db.saveUserRegistrationData({
                     first_name,
@@ -343,6 +350,7 @@ app.post("/profile/edit", (req, res) => {
                     password_hash,
                 })
                     .then((result) => {
+                        console.log("Result", result);
                         req.session.user_id = result.rows[0].id;
                         res.redirect("/profile");
                     })
@@ -356,62 +364,46 @@ app.post("/profile/edit", (req, res) => {
             .catch((err) => {
                 console.log("error in hash", err);
             });
-        // UPDATE on users (first, last, email, and password) columns
-        db.updateUsersFirstLastEmailAndPassword(
-            first_name,
-            last_name,
-            email,
-            password_hash
-        )
-            .then((result) => {
-                console.log(
-                    "result in updating users first_name, last_name, email and password",
-                    result
-                );
-            })
-            .catch((err) => {
-                console.log(
-                    "Error in updating users first_name, last_name, email  and password",
-                    err
-                );
-                first_name, last_name, email, password_hash, id;
-                res.redirect("/thanks");
-            });
-        // UPSERT on user_profiles
-        db.upsertUserProfilesAgeCityUrl()
-            .then((result) => {
-                console.log(
-                    "result in upsert for first_name, last_name, email and password",
-                    result
-                );
-                res.redirect("/thanks");
-            })
-            .catch((err) => {
-                console.log(
-                    "Error in upsert for first_name, last_name, email and password change",
-                    err
-                );
-            });
     } else {
         // runs if the user did not enter a new password
-        db.updateUsersFirstLastEmail(first_name, last_name, email, id)
-            .then((result) => {
-                console.log("result in updating users age, city, url", result);
-                first_name, last_name, email, id;
-                res.redirect("/thanks");
-            })
-            .catch((err) => {
-                console.log("Error in updating users age, city, url", err);
-            });
-        // and (2) run the UPSERT on user_profiles
-        db.upsertUserProfilesAgeCityUrl()
-            .then((result) => {
-                console.log("result in upsert for age, city, url", result);
-                res.redirect("/thanks");
-            })
-            .catch((err) => {
-                console.log("Error in upsert for age, city, url change", err);
-            });
+        if (req.session.user_id) {
+            const { first_name, last_name, email, age, city, url } = req.body;
+            db.updateUsersFirstLastEmail(
+                first_name,
+                last_name,
+                email,
+                req.session.user_id
+            )
+                .then((result) => {
+                    console.log(
+                        "result in updating users age, city, url",
+                        result
+                    );
+                    // UPSERT on user_profiles
+                    db.upsertUserProfilesAgeCityUrl(
+                        age,
+                        city,
+                        url,
+                        req.session.user_id
+                    )
+                        .then((result) => {
+                            console.log(
+                                "result in upsert for age, city, url",
+                                result
+                            );
+                            res.redirect("/thanks");
+                        })
+                        .catch((err) => {
+                            console.log(
+                                "Error in upsert for age, city, url change",
+                                err
+                            );
+                        });
+                })
+                .catch((err) => {
+                    console.log("Error in updating users age, city, url", err);
+                });
+        }
     }
 });
 

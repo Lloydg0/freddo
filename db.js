@@ -10,28 +10,6 @@ module.exports.getUpdatableUserData = (user_id) => {
     return db.query(q, [user_id]);
 };
 
-// module.exports.getUpdatableUserData = (
-//     first_name,
-//     last_name,
-//     email,
-//     age,
-//     city,
-//     url
-// ) => {
-//     const q = `SELECT users.id, first_name, last_name, email, user_profiles.id, age, city, url FROM users
-//                 LEFT JOIN user_profiles ON users.id = user_profiles.user_id
-//                 WHERE first_name = $1, last_name =$2, email = $3, age = $4, city = $5, url = $6`;
-//     return db.query(q, [
-//         first_name,
-//         last_name,
-//         email,
-//         user_profiles.id,
-//         age,
-//         city,
-//         url,
-//     ]);
-// };
-
 //update on users first,last, email,password
 module.exports.updateUsersFirstLastEmail = (
     frist_name,
@@ -39,8 +17,8 @@ module.exports.updateUsersFirstLastEmail = (
     email,
     id
 ) => {
-    const q = `UPDATE users SET (first_name, last_name, email) =
-               (first_name = $1, last_name = $2 , email = $3) 
+    const q = `UPDATE users 
+               SET first_name = $1, last_name = $2 , email = $3 
                WHERE ID = $4`;
     return db.query(q, [frist_name, last_name, email, id]);
 };
@@ -53,20 +31,21 @@ module.exports.updateUsersFirstLastEmailAndPassword = (
     password_hash,
     id
 ) => {
-    const q = `UPDATE users SET (first_name, last_name, email, password_hash) = 
-               (first_name = $1, last_name = $2 , email = $3, password_hash = $4) 
+    const q = `UPDATE users 
+               SET first_name = $1, last_name = $2 , email = $3, password_hash = $4
                WHERE ID = $5`;
     return db.query(q, [frist_name, last_name, email, password_hash, id]);
 };
 
 //USERT on users_profiles first,last, email
-module.exports.upsertUserProfilesAgeCityUrl = (age, city, url) => {
-    const q = ` INSERT INTO user_profiles (age, city, url)
-                VALUES ($1, $2, $3)
+module.exports.upsertUserProfilesAgeCityUrl = (age, city, url, user_id) => {
+    console.log("UPSERT INFO", age, city, url, user_id);
+    const q = ` INSERT INTO user_profiles (age, city, url, user_id)
+                VALUES ($1, $2, $3, $4)
                 ON CONFLICT (user_id)
                 DO UPDATE SET age = $1, city = $2 , url = $3
-                RETURNING user_id`;
-    const params = [age, city, url];
+                WHERE user_profiles.user_id = $4`;
+    const params = [age, city, url, user_id];
     return db.query(q, params);
 };
 
