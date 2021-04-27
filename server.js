@@ -162,7 +162,7 @@ app.get("/profile/edit", (req, res) => {
     if (req.session.user_id) {
         db.getUpdatableUserData(req.session.user_id)
             .then((result) => {
-                console.log("result.rows in profile edit route", result.rows);
+                // console.log("result.rows in profile edit route", result.rows);
                 res.render("edit", {
                     layout: "main",
                     first_name: result.rows[0].first_name,
@@ -335,34 +335,66 @@ app.post("/profile", (req, res) => {
 //POST /profile/edit request
 app.post("/profile/edit", (req, res) => {
     console.log("This is a POST request to the /profile/edit route");
-    const { first_name, last_name, email, password } = req.body;
+    const { password } = req.body;
     if (password) {
         console.log("REQ>BODY", req.body);
+        console.log("made in into password if block");
         //hash password
         hash(password)
             .then((password_hash) => {
+                console.log("made in into hashed password");
                 console.log("Password hash", password_hash);
                 //hash the password
-                db.saveUserRegistrationData({
+                const {
+                    first_name,
+                    last_name,
+                    email,
+                    age,
+                    city,
+                    url,
+                } = req.body;
+                db.updateUsersFirstLastEmailAndPassword(
                     first_name,
                     last_name,
                     email,
                     password_hash,
-                })
+                    req.session.user_id
+                )
                     .then((result) => {
-                        console.log("Result", result);
-                        req.session.user_id = result.rows[0].id;
-                        res.redirect("/profile");
+                        console.log(
+                            "result in updating users age, city, url",
+                            result
+                        );
+                        // UPSERT on user_profiles
+                        db.upsertUserProfilesAgeCityUrl(
+                            age,
+                            city,
+                            url,
+                            req.session.user_id
+                        )
+                            .then((result) => {
+                                console.log(
+                                    "result in upsert for age, city, url",
+                                    result
+                                );
+                                res.redirect("/thanks");
+                            })
+                            .catch((err) => {
+                                console.log(
+                                    "Error in upsert for age, city, url change",
+                                    err
+                                );
+                            });
                     })
                     .catch((err) => {
                         console.log(
-                            "Error in saving Users registration data",
+                            "Error in updating users age, city, url",
                             err
                         );
                     });
             })
             .catch((err) => {
-                console.log("error in hash", err);
+                console.log("Error in hashing password", err);
             });
     } else {
         // runs if the user did not enter a new password
