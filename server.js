@@ -162,15 +162,15 @@ app.get("/profile/edit", (req, res) => {
     if (req.session.user_id) {
         db.getUpdatableUserData(req.session.user_id)
             .then((result) => {
-                console.log("result in profile edit route", result);
+                console.log("result.rows in profile edit route", result.rows);
                 res.render("edit", {
                     layout: "main",
-                    first_name: result.rows.first_name,
-                    last_name: result.rows.last_name,
-                    email: result.rows.email,
-                    age: result.rows.age,
-                    city: result.rows.city,
-                    url: result.rows.url,
+                    first_name: result.rows[0].first_name,
+                    last_name: result.rows[0].last_name,
+                    email: result.rows[0].email,
+                    age: result.rows[0].age,
+                    city: result.rows[0].city,
+                    url: result.rows[0].url,
                 });
             })
             .catch((err) => {
@@ -357,7 +357,12 @@ app.post("/profile/edit", (req, res) => {
                 console.log("error in hash", err);
             });
         // UPDATE on users (first, last, email, and password) columns
-        db.updateUsersFirstLastEmailAndPassword()
+        db.updateUsersFirstLastEmailAndPassword(
+            first_name,
+            last_name,
+            email,
+            password_hash
+        )
             .then((result) => {
                 console.log(
                     "result in updating users first_name, last_name, email and password",
@@ -369,6 +374,8 @@ app.post("/profile/edit", (req, res) => {
                     "Error in updating users first_name, last_name, email  and password",
                     err
                 );
+                first_name, last_name, email, password_hash, id;
+                res.redirect("/thanks");
             });
         // UPSERT on user_profiles
         db.upsertUserProfilesAgeCityUrl()
@@ -387,9 +394,11 @@ app.post("/profile/edit", (req, res) => {
             });
     } else {
         // runs if the user did not enter a new password
-        db.updateUsersFirstLastEmailAndPassword()
+        db.updateUsersFirstLastEmail(first_name, last_name, email, id)
             .then((result) => {
                 console.log("result in updating users age, city, url", result);
+                first_name, last_name, email, id;
+                res.redirect("/thanks");
             })
             .catch((err) => {
                 console.log("Error in updating users age, city, url", err);

@@ -3,10 +3,11 @@ const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
 //Getting the dynamic data to show in the edit page
-module.exports.getUpdatableUserData = () => {
+module.exports.getUpdatableUserData = (user_id) => {
     const q = `SELECT users.id, first_name, last_name, email, user_profiles.id, age, city, url FROM users
-                LEFT JOIN user_profiles ON users.id = user_profiles.user_id`;
-    return db.query(q);
+                LEFT JOIN user_profiles ON users.id = user_profiles.user_id
+                WHERE user_id = $1`;
+    return db.query(q, [user_id]);
 };
 
 // module.exports.getUpdatableUserData = (
@@ -38,7 +39,8 @@ module.exports.updateUsersFirstLastEmail = (
     email,
     id
 ) => {
-    const q = `UPDATE users SET (first_name, last_name, email) = (first_name = $1, last_name = $2 , email = $3) 
+    const q = `UPDATE users SET (first_name, last_name, email) =
+               (first_name = $1, last_name = $2 , email = $3) 
                WHERE ID = $4`;
     return db.query(q, [frist_name, last_name, email, id]);
 };
@@ -51,7 +53,8 @@ module.exports.updateUsersFirstLastEmailAndPassword = (
     password_hash,
     id
 ) => {
-    const q = `UPDATE users SET (first_name, last_name, email, password_hash) = (first_name = $1, last_name = $2 , email = $3, password_hash = $4) 
+    const q = `UPDATE users SET (first_name, last_name, email, password_hash) = 
+               (first_name = $1, last_name = $2 , email = $3, password_hash = $4) 
                WHERE ID = $5`;
     return db.query(q, [frist_name, last_name, email, password_hash, id]);
 };
