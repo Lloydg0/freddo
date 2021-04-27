@@ -360,25 +360,25 @@ app.post("/profile/edit", (req, res) => {
                     "result in updating users first_name, last_name, email and password",
                     result
                 );
-                // UPSERT on user_profiles
-                db.upsertUserProfilesAgeCityUrl()
-                    .then((result) => {
-                        console.log(
-                            "result in upsert for first_name, last_name, email and password",
-                            result
-                        );
-                        res.redirect("/thanks");
-                    })
-                    .catch((err) => {
-                        console.log(
-                            "Error in upsert for first_name, last_name, email and password change",
-                            err
-                        );
-                    });
             })
             .catch((err) => {
                 console.log(
                     "Error in updating users first_name, last_name, email  and password",
+                    err
+                );
+            });
+        // UPSERT on user_profiles
+        db.upsertUserProfilesAgeCityUrl()
+            .then((result) => {
+                console.log(
+                    "result in upsert for first_name, last_name, email and password",
+                    result
+                );
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log(
+                    "Error in upsert for first_name, last_name, email and password change",
                     err
                 );
             });
@@ -387,24 +387,18 @@ app.post("/profile/edit", (req, res) => {
         db.updateUsersFirstLastEmailAndPassword()
             .then((result) => {
                 console.log("result in updating users age, city, url", result);
-                // and (2) run the UPSERT on user_profiles
-                db.upsertUserProfilesAgeCityUrl()
-                    .then((result) => {
-                        console.log(
-                            "result in upsert for age, city, url",
-                            result
-                        );
-                        res.redirect("/thanks");
-                    })
-                    .catch((err) => {
-                        console.log(
-                            "Error in upsert for age, city, url change",
-                            err
-                        );
-                    });
             })
             .catch((err) => {
                 console.log("Error in updating users age, city, url", err);
+            });
+        // and (2) run the UPSERT on user_profiles
+        db.upsertUserProfilesAgeCityUrl()
+            .then((result) => {
+                console.log("result in upsert for age, city, url", result);
+                res.redirect("/thanks");
+            })
+            .catch((err) => {
+                console.log("Error in upsert for age, city, url change", err);
             });
     }
 });

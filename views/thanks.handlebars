@@ -7,6 +7,7 @@
 
 <div class="delete-signature-wrapper">
 <form method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <button href="/signature/delete" class="delete-signature">Delete Signature</button>
 </form>
 </div>

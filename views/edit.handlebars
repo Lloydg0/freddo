@@ -13,7 +13,7 @@
 
 <div>
 <label class="user-age-label" for="user-age-label">Age</label>
-    <input id="user-age" type="text" name="age" value="{{age}}">
+    <input id="user-age" type="number" min="0" name="age" value="{{age}}" >
 
     <label class="user-city-label" for="user-city-label">City</label>
     <input id="user-city" type="text" name="city" value="{{city}}">
@@ -24,10 +24,10 @@
 
 <div>
     <label class="user-email-label" for="user-email-label">Email</label>
-    <input id="user-email" type="email" name="email"  value="{{email}}" required>
+    <input id="user-email" type="email" name="email"  value="{{email}}">
 
     <label class="user-password-label" for="user-password-label">Password</label>
-    <input id="user-password" type="password" name="password" value="" required>
+    <input id="user-password" type="password" name="password" value="">
 </div>
 
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
