@@ -309,21 +309,27 @@ app.post("/profile", (req, res) => {
     const { age, city, url } = req.body;
     //check if age city, url entered then database insert
     if (req.session.user_id) {
-        const prefixedURL = prefixURL(url);
-        //adding user profile information to db
-        db.addUserProfileInfo({ age, city, prefixedURL }, req.session.user_id)
-            .then((result) => {
-                console.log("result in storing user profile info", result);
-                res.redirect("/petition");
-            })
-            .catch((err) => {
-                console.log("Error in post profiles route", err);
-            });
+        if (age || city || url) {
+            const prefixedURL = prefixURL(url);
+            //adding user profile information to db
+            db.addUserProfileInfo(
+                { age, city, prefixedURL },
+                req.session.user_id
+            )
+                .then((result) => {
+                    console.log("result in storing user profile info", result);
+                    res.redirect("/petition");
+                })
+                .catch((err) => {
+                    console.log("Error in post profiles route", err);
+                });
+        }
+        // otherwise redirect
+        else if (!req.body.age || !req.body.city || !req.body.url) {
+            res.redirect("/petition");
+        }
     }
-    // otherwise redirect
-    // } else if () {
-    //     res.redirect("/thanks");
-    // }
+
     // checking to see if a valid number was entered for age and throwing on page error.
     if (isNaN(age) && !age % 1 === 0) {
         res.render("/profile", {
