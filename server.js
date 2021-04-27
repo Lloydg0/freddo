@@ -192,7 +192,7 @@ app.get("/logout", (req, res) => {
 app.post("/petition", (req, res) => {
     console.log(" a Post request was made to /petition");
     //sending the cookie
-    if (req.body.yes) {
+    if (req.body) {
         //sending the added data to the db
         db.addSignatureId(req.body.signature, req.session.user_id)
             .then((result) => {
@@ -210,7 +210,7 @@ app.post("/petition", (req, res) => {
     }
     //validation
     if (!req.body.signature) {
-        return res.render("/petition", {
+        return res.render("petition", {
             err: "No signature detected",
         });
     }
@@ -250,8 +250,8 @@ app.post("/register", (req, res) => {
 
     //validation;
     if (!first_name || !last_name || !email || !password) {
-        return res.render("/register", {
-            err: "An error occurred, please try again. ",
+        return res.render("register", {
+            err: "An error occurred, please try again.",
         });
     }
 });
@@ -296,7 +296,7 @@ app.post("/login", (req, res) => {
 
         //validation
         if (!email || !password) {
-            return res.render("/login", {
+            return res.render("login", {
                 err: "No credentials found",
             });
         }
@@ -332,8 +332,8 @@ app.post("/profile", (req, res) => {
 
     // checking to see if a valid number was entered for age and throwing on page error.
     if (isNaN(age) && !age % 1 === 0) {
-        res.render("/profile", {
-            err: "Please enter a valid number only for age",
+        res.render("profile", {
+            err: "Please enter a valid number for age",
         });
     }
 });
