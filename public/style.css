@@ -56,7 +56,10 @@ body {
 }
 
 .freddo {
-    margin-top: 50px;
+    margin-top: 0px;
+    transform: scale(0.7);
+    /* width: clamp(150px, 60%, 350px);
+    height: 60%; */
 }
 
 h1,
@@ -75,7 +78,8 @@ h3,
     justify-content: center;
     margin: 40px;
     text-decoration: none;
-    color: #5d2e8c;
+    color: black;
+    /* color: #5d2e8c; */
     /* color: #0c2551; */
     font-size: 20px;
     font-family: "Roboto Condensed", sans-serif;
@@ -102,7 +106,7 @@ h3,
         to right,
         rgb(206, 129, 13) 0%,
         rgb(241, 22, 6) 50%,
-        /* #0c2551 50%  */ #5d2e8c 50%
+        /* #0c2551 50%  #5d2e8c 50% */ /* #0c2551 50%  */ #000000 50%
     );
     background-clip: text;
     -webkit-background-clip: text;
@@ -124,7 +128,7 @@ h3,
         #0c2551 50%  */
             rgb(212, 135, 248) 0%,
         rgb(79, 3, 255) 50%,
-        #5d2e8c 50%
+        /* #5d2e8c 50% */ #000000 50%
     );
     background-clip: text;
     -webkit-background-clip: text;
@@ -171,13 +175,15 @@ h3,
     display: flex;
     justify-content: center;
     font-family: "Roboto Condensed", sans-serif;
-    color: #5d2e8c;
+    color: black;
+    /* color: #5d2e8c; */
     /* color: #0c2551; */
     font-size: 16px;
 }
 
 .url-link {
     color: #5d2e8c;
+    /* color: black; */
     /* color: #0c2551; */
     margin-right: 10px;
     text-decoration: none;
@@ -191,7 +197,8 @@ h3,
 h1,
 h3,
 .title-head {
-    color: #5d2e8c;
+    color: black;
+    /* color: #5d2e8c; */
     /* color: #0c2551; */
     font-family: "Montserrat", sans-serif;
     margin-bottom: 10px;
@@ -241,7 +248,8 @@ label,
 .navilinks,
 .register-label {
     font-family: "Roboto Condensed", sans-serif;
-    color: #5d2e8c;
+    /* color: #5d2e8c; */
+    color: black;
     /* color: #0c2551; */
 }
 
@@ -344,4 +352,18 @@ form {
     justify-content: center;
     align-content: center;
     align-items: center;
+}
+
+@media only screen and (max-width: 1355px) {
+    .printed-signature {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 1050px) {
+    .freddo {
+        display: none;
+    }
+    .printed-signature {
+        width: 100%;
+    }
 }
