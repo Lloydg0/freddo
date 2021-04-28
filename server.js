@@ -56,6 +56,11 @@ app.use((req, res, next) => {
 
 ///////////////////////////////////////////////////Get requests
 
+app.get("/", (req, res) => {
+    console.log("a GET request was made to / Route");
+    res.redirect("/register");
+});
+
 // login get request
 app.get("/login", (req, res) => {
     console.log("a GET request was made to /login Route");
