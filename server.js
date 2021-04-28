@@ -5,7 +5,8 @@ const db = require("./db");
 const hb = require("express-handlebars");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
-const { SECRET_KEY } = require("./secrets.json");
+const SECRET_KEY =
+    process.env.SECRET_KEY || require("./secrets.json").SECRET_KEY;
 const { hash, compare, prefixURL } = require("./utils/bc.js");
 
 // config information
@@ -460,4 +461,6 @@ app.post("/signature/delete", (req, res) => {
         });
 });
 
-app.listen(8080, () => console.log("Petition up and running"));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("Petition up and running")
+);
