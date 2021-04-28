@@ -367,3 +367,45 @@ form {
         width: 100%;
     }
 }
+@media only screen and (max-width: 800px) {
+    .navilinks {
+        width: 100%;
+        display: block;
+    }
+    .navilink-login {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-logout {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-register {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-signers {
+        display: block;
+        margin: 5px;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    .supporters-container {
+        width: 100%;
+    }
+    .supporters-list {
+        width: 100%;
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .supporters-container {
+        width: 100%;
+    }
+    .supporters-list {
+        width: 100%;
+        display: block;
+    }
+}
