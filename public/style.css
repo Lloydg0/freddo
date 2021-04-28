@@ -215,7 +215,7 @@ h3.title-head {
 }
 
 h1 {
-    margin-top: 25px;
+    margin-top: 30px;
 }
 
 .conditions {
@@ -398,14 +398,88 @@ form {
         width: 100%;
         display: block;
     }
+    .more-supporters,
+    .delete-signature {
+        font-size: 14px;
+        padding-top: 10px;
+        margin: 10px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 18%;
+        left: 50%;
+    }
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 637px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 16px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 19%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 612px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 16px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 16%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 543px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 14px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 19%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 505px) {
     .supporters-container {
         width: 100%;
     }
     .supporters-list {
         width: 100%;
         display: block;
+    }
+    h1,
+    h3,
+    .title-head,
+    .more-supporters {
+        font-size: 14px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 6%;
+        left: 50%;
     }
 }
