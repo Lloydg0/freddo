@@ -8,6 +8,7 @@ const csurf = require("csurf");
 const SECRET_KEY =
     process.env.SECRET_KEY || require("./secrets.json").SECRET_KEY;
 const { hash, compare, prefixURL } = require("./utils/bc.js");
+module.exports.app = app;
 
 // config information
 app.engine("handlebars", hb());
@@ -466,6 +467,8 @@ app.post("/signature/delete", (req, res) => {
         });
 });
 
-app.listen(process.env.PORT || 8080, () =>
-    console.log("Petition up and running")
-);
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080, () =>
+        console.log("Petition up and running")
+    );
+}
