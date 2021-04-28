@@ -5,11 +5,18 @@
 
 body {
     font-family: "Roboto-condensed", sans-serif;
-    background-image: linear-gradient(
+    /* background-image: linear-gradient(
         178.5deg,
         rgba(122, 231, 248, 1) 6.5%,
         rgba(86, 118, 191, 1) 90.9%
+    ); */
+    background-image: linear-gradient(
+        178.5deg,
+        rgb(212, 135, 248) 6.5%,
+        rgb(87, 32, 143) 90.9%
     );
+    /* rgb(212, 135, 248) 6.5%,
+    rgb(80, 23, 138) 90.9% */
 }
 
 .container {
@@ -37,7 +44,8 @@ body {
     z-index: 1;
     height: 75vh;
     width: 30vw;
-    background: #0c2551;
+    background: #5d2e8c;
+    /* background: #0c2551; */
     padding: 50px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -45,6 +53,10 @@ body {
     text-align: center;
     filter: drop-shadow(1px 1px 20px rgba(0, 0, 0, 0.2));
     overflow: hidden;
+}
+
+.freddo {
+    margin-top: 50px;
 }
 
 h1,
@@ -63,7 +75,8 @@ h3,
     justify-content: center;
     margin: 40px;
     text-decoration: none;
-    color: #0c2551;
+    color: #5d2e8c;
+    /* color: #0c2551; */
     font-size: 20px;
     font-family: "Roboto Condensed", sans-serif;
     overflow: hidden;
@@ -89,7 +102,7 @@ h3,
         to right,
         rgb(206, 129, 13) 0%,
         rgb(241, 22, 6) 50%,
-        #0c2551 50%
+        /* #0c2551 50%  */ #5d2e8c 50%
     );
     background-clip: text;
     -webkit-background-clip: text;
@@ -106,9 +119,12 @@ h3,
 .more-supporters {
     background: linear-gradient(
         to right,
-        rgba(122, 231, 248, 1) 0%,
+        /* rgba(122, 231, 248, 1) 0%,
         rgba(86, 118, 191, 1) 50%,
-        #0c2551 50%
+        #0c2551 50%  */
+            rgb(212, 135, 248) 0%,
+        rgb(79, 3, 255) 50%,
+        #5d2e8c 50%
     );
     background-clip: text;
     -webkit-background-clip: text;
@@ -155,12 +171,14 @@ h3,
     display: flex;
     justify-content: center;
     font-family: "Roboto Condensed", sans-serif;
-    color: #0c2551;
+    color: #5d2e8c;
+    /* color: #0c2551; */
     font-size: 16px;
 }
 
 .url-link {
-    color: #0c2551;
+    color: #5d2e8c;
+    /* color: #0c2551; */
     margin-right: 10px;
     text-decoration: none;
     margin-left: 10px;
@@ -173,8 +191,8 @@ h3,
 h1,
 h3,
 .title-head {
-    /* color: #fff; */
-    color: #0c2551;
+    color: #5d2e8c;
+    /* color: #0c2551; */
     font-family: "Montserrat", sans-serif;
     margin-bottom: 10px;
 }
@@ -223,8 +241,8 @@ label,
 .navilinks,
 .register-label {
     font-family: "Roboto Condensed", sans-serif;
-
-    color: #0c2551;
+    color: #5d2e8c;
+    /* color: #0c2551; */
 }
 
 .navilinks,
@@ -255,12 +273,6 @@ label,
     display: flex;
     justify-content: flex-start;
     margin-top: 5px;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
 .register-label {
@@ -312,7 +324,8 @@ input {
     color: #ffffff;
     text-align: center;
     transition: all 0.15s;
-    background-color: #ea4c89;
+    /* background-color: #ea4c89; */
+    background-color: #e919a4;
 }
 
 #submit-button:hover {
