@@ -4,7 +4,7 @@ const db = spicedPg(
     process.env.DATABASE_URL ||
         "postgres:postgres:postgres@localhost:5432/petition"
 );
-
+const { prefixURL } = require("./utils/bc.js");
 //Getting the dynamic data to show in the edit page
 module.exports.getUpdatableUserData = (user_id) => {
     const q = `SELECT users.id, first_name, last_name, email, user_profiles.id, age, city, url FROM users
@@ -48,7 +48,7 @@ module.exports.upsertUserProfilesAgeCityUrl = (age, city, url, user_id) => {
                 ON CONFLICT (user_id)
                 DO UPDATE SET age = $1, city = $2 , url = $3
                 WHERE user_profiles.user_id = $4`;
-    const params = [age, city, url, user_id];
+    const params = [age || null, city, prefixURL(url), user_id];
     return db.query(q, params);
 };
 
@@ -120,7 +120,7 @@ module.exports.addUserProfileInfo = (data, user_id) => {
     const params = [
         data.age || null,
         data.city || null,
-        data.url || null,
+        prefixURL(data.url) || null,
         user_id,
     ];
     console.log("params", params);
