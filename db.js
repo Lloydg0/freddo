@@ -117,6 +117,12 @@ module.exports.addSignatureId = (signature, user_id) => {
 module.exports.addUserProfileInfo = (data, user_id) => {
     const q = `INSERT INTO user_profiles (age, city, url, user_id)
                VALUES ($1, $2, $3, $4) RETURNING ID`;
-    const params = [data.age, data.city, data.prefixedURL, user_id];
+    const params = [
+        data.age || null,
+        data.city || null,
+        data.url || null,
+        user_id,
+    ];
+    console.log("params", params);
     return db.query(q, params);
 };

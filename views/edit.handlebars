@@ -12,8 +12,11 @@
 </div>
 
 <div>
+    {{#if err}}
+    <h5>{{err}}</h5>
+    {{/if}}
 <label class="user-age-label" for="user-age-label">Age</label>
-    <input id="user-age" type="text" name="age" value="{{age}}" >
+    <input id="user-age" type="text" name="age" value="{{age}}">
 
     <label class="user-city-label" for="user-city-label">City</label>
     <input id="user-city" type="text" name="city" value="{{city}}">

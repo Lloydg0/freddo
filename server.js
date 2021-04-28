@@ -80,7 +80,7 @@ app.get("/register", (req, res) => {
 
 //profile GET request
 app.get("/profile", (req, res) => {
-    console.log("a GET request was made to /profile Route");
+    console.log("a GET request was made to /profile Route", req.body);
     if (req.session.user_id) {
         res.render("profile", {
             layour: "main",
@@ -109,7 +109,8 @@ app.get("/thanks", (req, res) => {
         //getting the signature from the ID and allowing it to be rendered
         db.getSignatureById(req.session.signatureId)
             .then((result) => {
-                // console.log(result);
+                console.log("Thank you result", result);
+                console.log("Thank you req.body", req.body);
                 res.render("thanks", {
                     layout: "main",
                     signature: result.rows[0].signature,
@@ -165,20 +166,27 @@ app.get("/signers/:city", (req, res) => {
 
 // GET profile/edit route
 app.get("/profile/edit", (req, res) => {
-    console.log("GET request made to the profile edit route");
+    console.log("GET request made to the profile edit route", req.body);
+    console.log(
+        "GET request made to the profile edit route for userID",
+        req.session
+    );
+
     if (req.session.user_id) {
         db.getUpdatableUserData(req.session.user_id)
             .then((result) => {
-                // console.log("result.rows in profile edit route", result.rows);
-                res.render("edit", {
-                    layout: "main",
-                    first_name: result.rows[0].first_name,
-                    last_name: result.rows[0].last_name,
-                    email: result.rows[0].email,
-                    age: result.rows[0].age,
-                    city: result.rows[0].city,
-                    url: result.rows[0].url,
-                });
+                console.log("result.rows in profile edit route", result);
+                if (result.rows[0]) {
+                    res.render("edit", {
+                        layout: "main",
+                        first_name: result.rows[0].first_name,
+                        last_name: result.rows[0].last_name,
+                        email: result.rows[0].email,
+                        age: result.rows[0].age,
+                        city: result.rows[0].city,
+                        url: result.rows[0].url,
+                    });
+                }
             })
             .catch((err) => {
                 console.log("Error in profile/edit get request", err);
@@ -314,17 +322,22 @@ app.post("/login", (req, res) => {
 app.post("/profile", (req, res) => {
     console.log("This was a POST request to the /profile route");
     const { age, city, url } = req.body;
+
+    console.log("req. body for the profile route", req.body);
     //check if age city, url entered then database insert
     if (req.session.user_id) {
         if (age || city || url) {
-            const prefixedURL = prefixURL(url);
+            const prefixedUrl = prefixURL(url);
             //adding user profile information to db
             db.addUserProfileInfo(
-                { age, city, prefixedURL },
+                { age, city, url: prefixedUrl },
                 req.session.user_id
             )
                 .then((result) => {
-                    console.log("result in storing user profile info", result);
+                    console.log(
+                        "result in storing user profile info",
+                        result.rows
+                    );
                     res.redirect("/petition");
                 })
                 .catch((err) => {
@@ -332,8 +345,22 @@ app.post("/profile", (req, res) => {
                 });
         }
         // otherwise redirect
-        else if (!req.body.age || !req.body.city || !req.body.url) {
-            res.redirect("/petition");
+        if (req.session.user_id) {
+            if (!req.body.age || !req.body.city || !req.body.url) {
+                console.log("No profile information posted", req.body);
+                db.addUserProfileInfo({ age, city, url }, req.session.user_id)
+                    .then((result) => {
+                        console.log(
+                            "result in storing user profile info",
+                            result.rows
+                        );
+                        res.redirect("/petition");
+                    })
+                    .catch((err) => {
+                        console.log("Error in post profiles route", err);
+                    });
+                res.redirect("/petition");
+            }
         }
     }
 
