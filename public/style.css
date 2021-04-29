@@ -343,6 +343,7 @@ input {
 }
 
 form {
+    margin-top: 30px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -365,6 +366,12 @@ form {
     }
     .printed-signature {
         width: 100%;
+    }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 25%;
+        transform: scale(0.9);
     }
 }
 @media only screen and (max-width: 800px) {
@@ -409,6 +416,12 @@ form {
         bottom: 18%;
         left: 50%;
     }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 18%;
+        transform: scale(0.8);
+    }
 }
 
 @media only screen and (max-width: 637px) {
@@ -439,6 +452,12 @@ form {
         position: absolute;
         bottom: 16%;
         left: 50%;
+    }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 5%;
+        transform: scale(0.8);
     }
 }
 @media only screen and (max-width: 543px) {

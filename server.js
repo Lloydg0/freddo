@@ -7,7 +7,7 @@ const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const SECRET_KEY =
     process.env.SECRET_KEY || require("./secrets.json").SECRET_KEY;
-const { hash, compare, prefixURL } = require("./utils/bc.js");
+const { hash, compare } = require("./utils/bc.js");
 module.exports.app = app;
 
 // config information
@@ -327,12 +327,8 @@ app.post("/profile", (req, res) => {
     //check if age city, url entered then database insert
     if (req.session.user_id) {
         if (age || city || url) {
-            const prefixedUrl = prefixURL(url);
             //adding user profile information to db
-            db.addUserProfileInfo(
-                { age, city, url: prefixedUrl },
-                req.session.user_id
-            )
+            db.addUserProfileInfo({ age, city, url }, req.session.user_id)
                 .then((result) => {
                     console.log(
                         "result in storing user profile info",
