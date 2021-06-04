@@ -1,0 +1,42 @@
+{{>log-out}}
+<h3 class="title-head">Feel free to edit your profile</h3>
+
+<form method="POST">
+
+    <div>
+    <label class="firstname-label" for="firstname">First Name</label>
+    <input id="firstname" type="text" name="first_name" value="{{first_name}}">
+
+    <label class="lastname-label" for="lastname">Last Name</label>
+    <input id="lastname" type="text" name="last_name" value="{{last_name}}">
+</div>
+
+<div>
+    {{#if err}}
+    <h5>{{err}}</h5>
+    {{/if}}
+<label class="user-age-label" for="user-age-label">Age</label>
+    <input id="user-age" type="text" name="age" value="{{age}}">
+
+    <label class="user-city-label" for="user-city-label">City</label>
+    <input id="user-city" type="text" name="city" value="{{city}}">
+
+    <label class="user-website-label" for="user-website-label">Website</label>
+    <input id="user-website" type="text" name="url" value="{{url}}">
+</div>
+
+<div>
+    <label class="user-email-label" for="user-email-label">Email</label>
+    <input id="user-email" type="email" name="email"  value="{{email}}">
+
+    <label class="user-password-label" for="user-password-label">Password</label>
+    <input id="user-password" type="password" name="password">
+</div>
+
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+<div>
+    <label for="button"></label>
+    <button id="submit-button">Update</button>
+</div> 
+</form>

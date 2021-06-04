@@ -1,0 +1,39 @@
+
+<form method="POST">
+    
+{{!-- <div>
+  <label class="firstname-label" for="firstname">First Name</label>
+  <input id="firstname" type="text" name="first_name"  required>
+
+  <label class="lastname-label" for="lastname">Last Name</label>
+  <input id="lastname" type="text" name="last_name" required>
+</div> --}}
+
+{{#if err}}
+<h5>{{err}}</h5>
+{{/if}}
+
+
+<div>
+    <label for="signature"></label>
+    <textarea name="signature" id="hidden-data" cols="1" rows="1"></textarea>
+</div>
+
+<div>
+    <label class="signature-label"  for="onlinesignature">To finalise please E-Sign below</label>
+    <canvas id="canvas-signature" width="400" height="60"></canvas>
+</div>
+
+<div class="conditions">
+    <input class="check" type="checkbox" name="yes" id="yes" required>
+    <p class="terms">Creating an account meants that you are ok with our terms and conditions.</p>
+</div>
+
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+<div>
+    <label for="button"></label>
+    <button id="submit-button">Sign</button>
+</div> 
+
+</form>

@@ -1,0 +1,504 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto-condensed", sans-serif;
+    /* background-image: linear-gradient(
+        178.5deg,
+        rgba(122, 231, 248, 1) 6.5%,
+        rgba(86, 118, 191, 1) 90.9%
+    ); */
+    background-image: linear-gradient(
+        178.5deg,
+        rgb(212, 135, 248) 6.5%,
+        rgb(87, 32, 143) 90.9%
+    );
+    /* rgb(212, 135, 248) 6.5%,
+    rgb(80, 23, 138) 90.9% */
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(1px 1px 20px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+}
+
+.box {
+    z-index: 1;
+    height: 75vh;
+    width: 40vw;
+    background: #fff;
+    padding: 50px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+.box-left {
+    z-index: 1;
+    height: 75vh;
+    width: 30vw;
+    background: #5d2e8c;
+    /* background: #0c2551; */
+    padding: 50px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: relative;
+    text-align: center;
+    filter: drop-shadow(1px 1px 20px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
+}
+
+.freddo {
+    margin-top: 0px;
+    transform: scale(0.7);
+    /* width: clamp(150px, 60%, 350px);
+    height: 60%; */
+}
+
+h1,
+h3,
+.title-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    text-align: start;
+}
+
+.more-supporters,
+.delete-signature {
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+    text-decoration: none;
+    color: black;
+    /* color: #5d2e8c; */
+    /* color: #0c2551; */
+    font-size: 20px;
+    font-family: "Roboto Condensed", sans-serif;
+    overflow: hidden;
+}
+
+.delete-signature-wrapper {
+    position: absolute;
+    /* bottom: 10%; */
+    left: 50%;
+}
+
+.delete-signature {
+    background: none;
+    border: none;
+    margin: 0px;
+    padding: 15px;
+    cursor: pointer;
+    height: 40px;
+    width: 200px;
+}
+.delete-signature {
+    background: linear-gradient(
+        to right,
+        rgb(206, 129, 13) 0%,
+        rgb(241, 22, 6) 50%,
+        /* #0c2551 50%  #5d2e8c 50% */ /* #0c2551 50%  */ #000000 50%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 750ms ease;
+}
+
+.navilink-login,
+.navilink-register,
+.navilink-signers,
+.navilink-logout,
+.more-supporters {
+    background: linear-gradient(
+        to right,
+        /* rgba(122, 231, 248, 1) 0%,
+        rgba(86, 118, 191, 1) 50%,
+        #0c2551 50%  */
+            rgb(212, 135, 248) 0%,
+        rgb(79, 3, 255) 50%,
+        /* #5d2e8c 50% */ #000000 50%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 1000ms ease;
+}
+
+.navilink-login:hover,
+.navilink-signers:hover,
+.navilink-register:hover,
+.navilink-logout:hover,
+.more-supporters:hover,
+.delete-signature:hover {
+    background-position: 0 100%;
+}
+
+.url-link:hover {
+    background-position: 0 100%;
+    transform: scale(1.1);
+}
+
+.supporters-wrapper {
+    position: relative;
+    padding: auto;
+    overflow: auto;
+    height: 500px;
+}
+
+.supporters-container {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.supporters-list {
+    margin: 3px;
+    display: flex;
+    justify-content: center;
+    font-family: "Roboto Condensed", sans-serif;
+    color: black;
+    /* color: #5d2e8c; */
+    /* color: #0c2551; */
+    font-size: 16px;
+}
+
+.url-link {
+    color: #5d2e8c;
+    /* color: black; */
+    /* color: #0c2551; */
+    margin-right: 10px;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.petition-description {
+    color: #fff;
+}
+
+h1,
+h3,
+.title-head {
+    color: black;
+    /* color: #5d2e8c; */
+    /* color: #0c2551; */
+    font-family: "Montserrat", sans-serif;
+    margin-bottom: 10px;
+}
+
+h5 {
+    font-family: "Roboto Condensed", sans-serif;
+    color: rgb(211, 67, 23);
+    margin: 10px 10px 20px 0px;
+}
+
+h3.title-head {
+    margin-top: 25px;
+}
+
+h1 {
+    margin-top: 30px;
+}
+
+.conditions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.check {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 24px;
+    height: 14px;
+    width: 14px;
+    clear: both;
+}
+
+.terms {
+    display: inline-block;
+    font-size: 10px;
+    padding-top: 6px;
+    padding-left: 10px;
+}
+
+input,
+label,
+.terms,
+.navilinks,
+.register-label {
+    font-family: "Roboto Condensed", sans-serif;
+    /* color: #5d2e8c; */
+    color: black;
+    /* color: #0c2551; */
+}
+
+.navilinks,
+.logout {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.navilinks {
+    margin-bottom: 5px;
+}
+
+.navilink-register,
+.navilink-signers {
+    margin-right: 10px;
+}
+
+.firstname-label,
+.lastname-label,
+.signature-label,
+.user-password-label,
+.user-email-label,
+.register-label,
+.user-age-label,
+.user-city-label,
+.user-website-label {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+
+.register-label {
+    padding-bottom: 10px;
+}
+
+.signature-label {
+    padding-bottom: 5px;
+}
+
+input {
+    display: block;
+    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.11);
+    background-color: #f5f6f7;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 0px;
+    margin-top: 5px;
+    height: 25px;
+    width: 200px;
+}
+
+#canvas-signature {
+    border: 1px solid rgba(0, 0, 0, 0.205);
+    background-color: #f5f6f7;
+    border-radius: 15px;
+    cursor: crosshair;
+}
+
+.printed-signature {
+    margin-top: 80px;
+    background-color: #f5f6f7;
+}
+
+#hidden-data {
+    /* visibility: hidden; */
+    display: none;
+}
+
+#submit-button {
+    display: inline-block;
+    padding: 7px 40px;
+    border: 1px solid #ffffff;
+    margin: 14px 4px 4px 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: "Roboto Condensed", sans-serif;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.15s;
+    /* background-color: #ea4c89; */
+    background-color: #e919a4;
+}
+
+#submit-button:hover {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+form {
+    margin-top: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+@media only screen and (max-width: 1355px) {
+    .printed-signature {
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 1050px) {
+    .freddo {
+        display: none;
+    }
+    .printed-signature {
+        width: 100%;
+    }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 25%;
+        transform: scale(0.9);
+    }
+}
+@media only screen and (max-width: 800px) {
+    .navilinks {
+        width: 100%;
+        display: block;
+    }
+    .navilink-login {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-logout {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-register {
+        display: block;
+        margin: 5px;
+    }
+    .navilink-signers {
+        display: block;
+        margin: 5px;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    .supporters-container {
+        width: 100%;
+    }
+    .supporters-list {
+        width: 100%;
+        display: block;
+    }
+    .more-supporters,
+    .delete-signature {
+        font-size: 14px;
+        padding-top: 10px;
+        margin: 10px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 18%;
+        left: 50%;
+    }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 18%;
+        transform: scale(0.8);
+    }
+}
+
+@media only screen and (max-width: 637px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 16px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 19%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 612px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 16px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 16%;
+        left: 50%;
+    }
+    form {
+        margin-top: 30px;
+        top: 30%;
+        left: 5%;
+        transform: scale(0.8);
+    }
+}
+@media only screen and (max-width: 543px) {
+    h1,
+    h3,
+    .title-head,
+    .more-supporters,
+    .delete-signature,
+    .navilinks {
+        font-size: 14px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 19%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 505px) {
+    .supporters-container {
+        width: 100%;
+    }
+    .supporters-list {
+        width: 100%;
+        display: block;
+    }
+    h1,
+    h3,
+    .title-head,
+    .more-supporters {
+        font-size: 14px;
+    }
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .delete-signature-wrapper {
+        position: absolute;
+        bottom: 6%;
+        left: 50%;
+    }
+}
