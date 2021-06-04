@@ -109,7 +109,6 @@ module.exports.addSignatureId = (signature, user_id) => {
     const q = `INSERT INTO signatures (user_id, signature)
                VALUES ($1, $2) RETURNING ID`;
     const params = [user_id, signature];
-    console.log("user_id", user_id);
     return db.query(q, params);
 };
 
@@ -123,6 +122,5 @@ module.exports.addUserProfileInfo = (data, user_id) => {
         prefixURL(data.url) || null,
         user_id,
     ];
-    console.log("params", params);
     return db.query(q, params);
 };
